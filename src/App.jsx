@@ -44,7 +44,6 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path='/ChatApp' element={<ChatApp />} />
-          {/* <PrivateRoute path="/chat" element={<ChatApp />} /> */}
         </Routes>
       </div>
     </Router>
