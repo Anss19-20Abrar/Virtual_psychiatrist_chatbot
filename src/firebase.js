@@ -6,7 +6,6 @@ import { getAuth } from 'firebase/auth';
 
 
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyBL6-YNhNLJ2nrKxDqLPeoXE3YBbT2w82U",
   authDomain: "virtual-psychiatrist-3ae55.firebaseapp.com",

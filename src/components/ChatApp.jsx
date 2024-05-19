@@ -1,6 +1,6 @@
 import  { useState, useEffect } from 'react';
 import { app } from '../firebase';
-import { getDatabase, } from "firebase/database";
+import { getDatabase } from "firebase/database";
 const db = getDatabase(app)
 
 const examples = [
