@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import emailIcon from "../img/email.svg";
 import passwordIcon from "../img/password.svg";
 import styles from "./SignUp.module.css";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { notify } from "./toast";
 import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
@@ -61,7 +61,7 @@ const Login = () => {
         <div>
           <button type="submit">Login</button>
           <span style={{ color: "#a29494", textAlign: "center", display: "inline-block", width: "100%" }}>
-            Don't have an account? <Link to="/signup">Create account</Link>
+            Don&apos;t have an account? <Link to="/signup">Create account</Link>
           </span>
         </div>
       </form>

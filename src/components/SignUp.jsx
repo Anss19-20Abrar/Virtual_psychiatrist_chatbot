@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { auth, firestore } from '../firebase';
 //Icon
 import userIcon from "../img/user.svg";
@@ -10,7 +10,7 @@ import { validate } from "./validate";
 import styles from "./SignUp.module.css";
 import "react-toastify/dist/ReactToastify.css";
 // Toast
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { notify } from "./toast";
 //
 import { Link, useNavigate } from "react-router-dom";  // Import useNavigate

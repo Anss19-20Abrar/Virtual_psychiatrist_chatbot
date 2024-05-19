@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import firebase from 'firebase/app';
-import 'firebase/database';
-
-const db = firebase.database();
+import  { useState, useEffect } from 'react';
+import { app } from '../firebase';
+import { getDatabase } from "firebase/database";
+const db = getDatabase(app)
 
 const examples = [
 "How to manage stress and anxiety effectively?",
