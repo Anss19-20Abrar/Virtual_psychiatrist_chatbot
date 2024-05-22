@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
 import { auth, firestore } from '../firebase';
-//Icon
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from "react-router-dom";
 import userIcon from "../img/user.svg";
 import emailIcon from "../img/email.svg";
 import passwordIcon from "../img/password.svg";
-// Validate
 import { validate } from "./validate";
-// Styles
 import styles from "./SignUp.module.css";
 import "react-toastify/dist/ReactToastify.css";
-// Toast
 import { ToastContainer } from "react-toastify";
 import { notify } from "./toast";
-//
-import { Link, useNavigate } from "react-router-dom";  // Import useNavigate
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const [data, setData] = useState({
@@ -26,22 +23,23 @@ const SignUp = () => {
 
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
-  const navigate = useNavigate();  // Replace useHistory with useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     setErrors(validate(data, "signUp"));
   }, [data, touched]);
 
   const changeHandler = (event) => {
-    if (event.target.name === "IsAccepted") {
-      setData({ ...data, [event.target.name]: event.target.checked });
-    } else {
-      setData({ ...data, [event.target.name]: event.target.value });
-    }
+    const { name, value, checked } = event.target;
+    setData((prevData) => ({
+      ...prevData,
+      [name]: name === "IsAccepted" ? checked : value,
+    }));
   };
 
   const focusHandler = (event) => {
-    setTouched({ ...touched, [event.target.name]: true });
+    const { name } = event.target;
+    setTouched((prevTouched) => ({ ...prevTouched, [name]: true }));
   };
 
   const submitHandler = async (event) => {
@@ -49,17 +47,16 @@ const SignUp = () => {
     if (!Object.keys(errors).length) {
       try {
         const { email, password, name } = data;
-        // Create user with email and password
-        const { user } = await auth.createUserWithEmailAndPassword(email, password);
-        
-        // Add user data to Firestore
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
         await firestore.collection('users').doc(user.uid).set({
           name,
           email,
         });
 
-        notify("You signed Up successfully", "success");
-        navigate("/chat");  // Use navigate to redirect to chat page
+        notify("You signed up successfully", "success");
+        navigate("/ChatApp");
       } catch (error) {
         if (error.code === 'auth/email-already-in-use') {
           notify("You have already registered, log in to your account", "warning");
@@ -68,17 +65,16 @@ const SignUp = () => {
         }
       }
     } else {
-      notify("Please Check fields again", "error");
+      notify("Please check fields again", "error");
       setTouched({
         name: true,
         email: true,
         password: true,
         confirmPassword: true,
-        IsAccepted: false,
+        IsAccepted: true,
       });
     }
   };
-
 
   return (
     <div className={styles.container}>
@@ -87,34 +83,34 @@ const SignUp = () => {
         <div>
           <div className={errors.name && touched.name ? styles.unCompleted : !errors.name && touched.name ? styles.completed : undefined}>
             <input type="text" name="name" value={data.name} placeholder="Name" onChange={changeHandler} onFocus={focusHandler} autoComplete="off" />
-            <img src={userIcon} alt="" />
+            <img src={userIcon} alt="User Icon" />
           </div>
           {errors.name && touched.name && <span className={styles.error}>{errors.name}</span>}
         </div>
         <div>
           <div className={errors.email && touched.email ? styles.unCompleted : !errors.email && touched.email ? styles.completed : undefined}>
             <input type="text" name="email" value={data.email} placeholder="E-mail" onChange={changeHandler} onFocus={focusHandler} autoComplete="off" />
-            <img src={emailIcon} alt="" />
+            <img src={emailIcon} alt="Email Icon" />
           </div>
           {errors.email && touched.email && <span className={styles.error}>{errors.email}</span>}
         </div>
         <div>
           <div className={errors.password && touched.password ? styles.unCompleted : !errors.password && touched.password ? styles.completed : undefined}>
             <input type="password" name="password" value={data.password} placeholder="Password" onChange={changeHandler} onFocus={focusHandler} autoComplete="off" />
-            <img src={passwordIcon} alt="" />
+            <img src={passwordIcon} alt="Password Icon" />
           </div>
           {errors.password && touched.password && <span className={styles.error}>{errors.password}</span>}
         </div>
         <div>
-          <div className={errors.confirmPassword && touched.confirmPassword ? styles.unCompleted : !errors.confirmPassword && touched.confirmPassword ? styles.completed : !errors.confirmPassword && touched.confirmPassword ? styles.completed : undefined}>
+          <div className={errors.confirmPassword && touched.confirmPassword ? styles.unCompleted : !errors.confirmPassword && touched.confirmPassword ? styles.completed : undefined}>
             <input type="password" name="confirmPassword" value={data.confirmPassword} placeholder="Confirm Password" onChange={changeHandler} onFocus={focusHandler} autoComplete="off" />
-            <img src={passwordIcon} alt="" />
+            <img src={passwordIcon} alt="Password Icon" />
           </div>
           {errors.confirmPassword && touched.confirmPassword && <span className={styles.error}>{errors.confirmPassword}</span>}
         </div>
         <div>
           <div className={styles.terms}>
-            <input type="checkbox" name="IsAccepted" value={data.IsAccepted} id="accept" onChange={changeHandler} onFocus={focusHandler} />
+            <input type="checkbox" name="IsAccepted" checked={data.IsAccepted} id="accept" onChange={changeHandler} onFocus={focusHandler} />
             <label htmlFor="accept">I accept terms of privacy policy</label>
           </div>
           {errors.IsAccepted && touched.IsAccepted && <span className={styles.error}>{errors.IsAccepted}</span>}
@@ -122,7 +118,7 @@ const SignUp = () => {
         <div>
           <button type="submit">Create Account</button>
           <span style={{ color: "#a29494", textAlign: "center", display: "inline-block", width: "100%" }}>
-            Already have a account? <Link to="/signin">Sign In</Link>
+            Already have an account? <Link to="/signin">Sign In</Link>
           </span>
         </div>
       </form>

@@ -1,23 +1,22 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-
-
-
+import { getAnalytics } from 'firebase/analytics';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBL6-YNhNLJ2nrKxDqLPeoXE3YBbT2w82U",
-  authDomain: "virtual-psychiatrist-3ae55.firebaseapp.com",
-  projectId: "virtual-psychiatrist-3ae55",
-  storageBucket: "virtual-psychiatrist-3ae55.appspot.com",
-  messagingSenderId: "864257435254",
-  appId: "1:864257435254:web:e5fea796b97e384055a157",
-  measurementId: "G-PS9J0J0NV7"
+  apiKey: "AIzaSyDSM9fbI-K87cjq3H3ebK3l8nL6p9fEUqc",
+  authDomain: "virtual-psychiatrist-f6c15.firebaseapp.com",
+  projectId: "virtual-psychiatrist-f6c15",
+  storageBucket: "virtual-psychiatrist-f6c15.appspot.com",
+  messagingSenderId: "101974128331",
+  appId: "1:101974128331:web:4b871c1c03ed3576640d4e",
+  measurementId: "G-B9BSEF64J0"
 };
 
 // Initialize Firebase
-export const app = initializeApp(firebaseConfig);
-export const firestore = getFirestore(app);
-export const auth = getAuth();
+const app = initializeApp(firebaseConfig);
+const firestore = getFirestore(app);
+const auth = getAuth(app);
+const analytics = getAnalytics(app);
 
+export { app, firestore, auth, analytics };

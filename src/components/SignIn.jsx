@@ -1,12 +1,12 @@
-import  { useState } from "react";
+import React, { useState } from "react";
 import emailIcon from "../img/email.svg";
 import passwordIcon from "../img/password.svg";
 import styles from "./SignUp.module.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { notify } from "./toast";
-import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
-import { auth } from '../firebase';
+import { Link, useNavigate } from "react-router-dom";
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 const Login = () => {
   const [data, setData] = useState({
@@ -15,7 +15,8 @@ const Login = () => {
   });
 
   const [touched, setTouched] = useState({});
-  const navigate = useNavigate(); // Replace useHistory with useNavigate
+  const navigate = useNavigate();
+  const auth = getAuth(); // Initialize Firebase auth
 
   const changeHandler = (event) => {
     setData({ ...data, [event.target.name]: event.target.value });
@@ -29,9 +30,9 @@ const Login = () => {
     event.preventDefault();
     try {
       const { email, password } = data;
-      await auth.signInWithEmailAndPassword(email, password);
+      await signInWithEmailAndPassword(auth, email, password);
       notify("You logged in successfully", "success");
-      navigate("/chat"); // Use navigate to redirect to chat page
+      navigate("/ChatApp");
     } catch (error) {
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
         notify("Your password or email is wrong", "error");
@@ -47,17 +48,32 @@ const Login = () => {
         <h2>Sign In</h2>
         <div>
           <div>
-            <input type="text" name="email" value={data.email} placeholder="E-mail" onChange={changeHandler} onFocus={focusHandler} autoComplete="off" />
+            <input
+              type="text"
+              name="email"
+              value={data.email}
+              placeholder="E-mail"
+              onChange={changeHandler}
+              onFocus={focusHandler}
+              autoComplete="off"
+            />
             <img src={emailIcon} alt="" />
           </div>
         </div>
         <div>
           <div>
-            <input type="password" name="password" value={data.password} placeholder="Password" onChange={changeHandler} onFocus={focusHandler} autoComplete="off" />
+            <input
+              type="password"
+              name="password"
+              value={data.password}
+              placeholder="Password"
+              onChange={changeHandler}
+              onFocus={focusHandler}
+              autoComplete="off"
+            />
             <img src={passwordIcon} alt="" />
           </div>
         </div>
-
         <div>
           <button type="submit">Login</button>
           <span style={{ color: "#a29494", textAlign: "center", display: "inline-block", width: "100%" }}>
