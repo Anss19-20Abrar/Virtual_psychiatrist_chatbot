@@ -32,7 +32,7 @@ const Login = () => {
       const { email, password } = data;
       await signInWithEmailAndPassword(auth, email, password);
       notify("You logged in successfully", "success");
-      navigate("/ChatApp");
+      navigate("/chatapp");
     } catch (error) {
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
         notify("Your password or email is wrong", "error");

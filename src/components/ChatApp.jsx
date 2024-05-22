@@ -1,15 +1,14 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { getDatabase, ref, onValue, push, set, off } from "firebase/database";
 import { app } from '../firebase';
-import { getDatabase } from "firebase/database";
-const db = getDatabase(app)
 
 const examples = [
-"How to manage stress and anxiety effectively?",
-"Tips for improving sleep quality and overcoming insomnia.",
-"Dealing with feelings of loneliness and isolation.",
-"Coping strategies for handling depression and low mood.",
-"Techniques for managing anger and frustration in daily life.",
-"Strategies for building self-confidence and overcoming self-doubt."
+  "How to manage stress and anxiety effectively?",
+  "Tips for improving sleep quality and overcoming insomnia.",
+  "Dealing with feelings of loneliness and isolation.",
+  "Coping strategies for handling  depression and low mood. ",
+  "Tips to manage anger and frustration in daily life.",
+  "Plan for building self-confidence and overcome self-doubt."
 ];
 
 const Chat = () => {
@@ -19,16 +18,18 @@ const Chat = () => {
   const [input, setInput] = useState('');
 
   useEffect(() => {
-    const chatRef = db.ref('chats');
-    chatRef.on('value', (snapshot) => {
+    const db = getDatabase(app);
+    const chatRef = ref(db, 'chats');
+    const historyRef = ref(db, 'chatHistory');
+
+    onValue(chatRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
         setChat(Object.values(data));
       }
     });
 
-    const historyRef = db.ref('chatHistory');
-    historyRef.on('value', (snapshot) => {
+    onValue(historyRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
         setChatHistory(Object.values(data));
@@ -36,15 +37,16 @@ const Chat = () => {
     });
 
     return () => {
-      chatRef.off('value');
-      historyRef.off('value');
+      off(chatRef, 'value');
+      off(historyRef, 'value');
     };
   }, []);
 
   const handleSend = async () => {
     if (input.trim()) {
-      const newChatRef = db.ref('chats').push();
-      newChatRef.set({ role: 'user', content: input });
+      const db = getDatabase(app);
+      const newChatRef = push(ref(db, 'chats'));
+      await set(newChatRef, { role: 'user', content: input });
 
       setInput('');
 
@@ -61,8 +63,8 @@ const Chat = () => {
         if (response.ok) {
           const data = await response.json();
           const { reply } = data; // Assuming your API returns a 'reply' field
-          const newResponseRef = db.ref('chats').push();
-          newResponseRef.set({ role: 'assistant', content: reply });
+          const newResponseRef = push(ref(db, 'chats'));
+          await set(newResponseRef, { role: 'assistant', content: reply });
         } else {
           console.error('Failed to fetch response from ChatGPT API');
         }
@@ -145,9 +147,7 @@ const Chat = () => {
             {chat.map((item, index) => (
               <div
                 key={index}
-                className={`w-[60%] mx-auto p-6 text-white flex ${
-                  item.role === 'assistant' && 'bg-slate-900 rounded'
-                }`}
+                className={`w-[60%] mx-auto p-6 text-white flex ${item.role === 'assistant' && 'bg-slate-900 rounded'}`}
               >
                 <span className='mr-8 p-2 bg-slate-500 text-white rounded-full h-full'>
                   {item.role === 'user' ? (
@@ -251,44 +251,3 @@ const Chat = () => {
 };
 
 export default Chat;
-
-
-
-
-
-
-
-// const ChatApp = () => {
-//   const [messages, setMessages] = useState([
-//     { text: 'Hello! How can I assist you?', type: 'bot' },
-//   ]);
-
-//   const handleUserInput = (text) => {
-//     setMessages([...messages, { text, type: 'user' }]);
-
-//     setTimeout(() => {
-//       setMessages([...messages, { text: 'Sorry, I am a mock bot. I cannot assist you.', type: 'bot' }]);
-//     }, 1000);
-//   };
-
-//   return (
-//     <div className="chat-app">
-//       <header className="header">
-//         <h1>Chat with Me!</h1>
-//       </header>
-//       <div className="chat-container">
-//         <div className="chat-history-container">
-//           <ChatHistory messages={messages} />
-//         </div>
-//         <div className="new-chat-container">
-//           <UserInput onSubmit={handleUserInput} />
-//         </div>
-//       </div>
-//       <footer className="footer">
-//         <p>© 2024 Virtual Psychiatrist Inc. All rights reserved.</p>
-//       </footer>
-//     </div>
-//   );
-// };
-
-// export default ChatApp;

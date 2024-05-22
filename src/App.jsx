@@ -24,17 +24,13 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  const PrivateRoute = ({ element, ...rest }) => {
-    return user ? (
-      element
-    ) : (
-      <Navigate to="/signin" />
-    );
-  };
-
   if (loading) {
     return <div>Loading...</div>;
   }
+
+  const PrivateRoute = ({ element, ...rest }) => {
+    return user ? element : <Navigate to="/signin" />;
+  };
 
   return (
     <Router>
@@ -43,7 +39,7 @@ function App() {
           <Route path="/" element={<Intro />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
-          <Route path='/chat' element={<PrivateRoute element={<ChatApp />} />} />
+          <Route path="/chatapp"  element={<ChatApp />} />
         </Routes>
       </div>
     </Router>
