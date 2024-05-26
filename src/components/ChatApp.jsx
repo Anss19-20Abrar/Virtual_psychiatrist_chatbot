@@ -1,21 +1,27 @@
 import { useState, useEffect } from 'react';
 import { getDatabase, ref, onValue, push, set, off } from "firebase/database";
-import { app } from '../firebase';
+import { app } from '../firebase'; // Ensure you have the correct path to your Firebase configuration
+import { getAuth, signOut } from "firebase/auth";
+import ContactUs from './ContactUs'; // Add this import
 
 const examples = [
   "How to manage stress and anxiety effectively?",
   "Tips for improving sleep quality and overcoming insomnia.",
   "Dealing with feelings of loneliness and isolation.",
-  "Coping strategies for handling  depression and low mood. ",
+  "Coping strategies for handling depression and low mood.",
   "Tips to manage anger and frustration in daily life.",
-  "Plan for building self-confidence and overcome self-doubt."
+  "Plan for building self-confidence and overcoming self-doubt."
 ];
+
+
 
 const Chat = () => {
   const [chat, setChat] = useState([]);
   const [chatHistory, setChatHistory] = useState([]);
   const [title, setTitle] = useState('');
   const [input, setInput] = useState('');
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [isContactUsVisible, setIsContactUsVisible] = useState(false);
 
   useEffect(() => {
     const db = getDatabase(app);
@@ -79,8 +85,32 @@ const Chat = () => {
     setTitle('');
   };
 
+  const togglePopup = () => {
+    setIsPopupVisible(!isPopupVisible);
+  };
+
+  const toggleContactUs = () => {
+    setIsContactUsVisible(!isContactUsVisible);
+  };
+
+  const handleLogout = () => {
+    console.log("Logout function triggered");
+
+    const auth = getAuth(); // Initialize Firebase Auth instance
+
+    signOut(auth).then(() => {
+      // Sign-out successful
+      console.log('Sign-out successful.');
+      alert('Sign-out successful.');
+      // Any additional logic after successful logout can be added here, such as redirecting to a login page
+    }).catch((error) => {
+      // An error happened
+      console.error('An error happened during logout:', error);
+    });
+  };
+
   return (
-    <div className='h-screen w-screen flex bg-[#050509]'>
+    <div className='h-screen w-screen flex bg-[#050509] relative'>
       <div className='w-[20%] h-screen bg-[#0c0c15] text-white p-4'>
         <div className='h-[5%]'>
           <button className='w-full h-[50px] border rounded hover:bg-slate-600' onClick={handleNewChat}>
@@ -114,33 +144,73 @@ const Chat = () => {
           ))}
         </div>
         <div className='overflow-scroll shadow-lg hide-scroll-bar h-[20%] border-t'>
-          {[1, 2].map((item, index) => (
-            <div key={index} className='py-3 text-center rounded mt-4 text-lg font-light flex items-center px-8 hover:bg-slate-600 cursor-pointer'>
-              <span className='mr-4'>
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  className='icon icon-tabler icon-tabler-settings-code'
-                  width='24'
-                  height='24'
-                  viewBox='0 0 24 24'
-                  strokeWidth='2'
-                  stroke='currentColor'
-                  fill='none'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                >
-                  <path stroke='none' d='M0 0h24v24H0z' fill='none'></path>
-                  <path d='M11.482 20.924a1.666 1.666 0 0 1 -1.157 -1.241a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.312 .318 1.644 1.794 .995 2.697'></path>
-                  <path d='M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0'></path>
-                  <path d='M20 21l2 -2l-2 -2'></path>
-                  <path d='M17 17l-2 2l2 2'></path>
-                </svg>
-              </span>
-              Code Settings
-            </div>
-          ))}
+          <div className='py-3 text-center rounded mt-4 text-lg font-light flex items-center px-8 hover:bg-slate-600 cursor-pointer' onClick={togglePopup}>
+            <span className='mr-4'>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                className='icon icon-tabler icon-tabler-settings-code'
+                width='24'
+                height='24'
+                viewBox='0 0 24 24'
+                strokeWidth='2'
+                stroke='currentColor'
+                fill='none'
+                strokeLinecap='round'
+                strokeLinejoin='round'
+              >
+                <path stroke='none' d='M0 0h24v24H0z' fill='none'></path>
+                <path d='M11.482 20.924a1.666 1.666 0 0 1 -1.157 -1.241a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.312 .318 1.644 1.794 .995 2.697'></path>
+                <path d='M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0'></path>
+                <path d='M20 21l2 -2l-2 -2'></path>
+                <path d='M17 17l-2 2l2 2'></path>
+              </svg>
+            </span>
+            Code Settings
+          </div>
+          <div className='py-3 text-center rounded mt-4 text-lg font-light flex items-center px-8 hover:bg-slate-600 cursor-pointer' onClick={toggleContactUs}>
+            <span className='mr-4'>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                className='icon icon-tabler icon-tabler-mail'
+                width='24'
+                height='24'
+                viewBox='0 0 24 24'
+                strokeWidth='2'
+                stroke='currentColor'
+                fill='none'
+                strokeLinecap='round'
+                strokeLinejoin='round'
+              >
+                <path stroke='none' d='M0 0h24v24H0z' fill='none'></path>
+                <path d='M3 8l9 6l9 -6'></path>
+                <path d='M21 8v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-8'></path>
+                <path d='M3 8l9 6l9 -6'></path>
+              </svg>
+            </span>
+            Contact Us
+          </div>
         </div>
       </div>
+
+      {isPopupVisible && (
+        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
+          <div className='bg-white p-6 rounded-lg shadow-lg' style={{ width: '250px', height: '200px', background: 'white' }}>
+            <div className='text-xl font-bold mb-4'>Settings</div>
+            <div className='py-2 hover:bg-gray-200 cursor-pointer' onClick={handleLogout}>
+              Logout
+            </div>
+            <button
+              className='mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700'
+              onClick={togglePopup}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      {isContactUsVisible && <ContactUs toggleContactUs={toggleContactUs} />}
+
       <div className='w-[80%]'>
         {chat.length > 0 ? (
           <div className='h-[80%] overflow-scroll hide-scroll-bar pt-8'>

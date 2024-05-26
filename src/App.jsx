@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import Intro from './components/Intro';
 import ChatApp from './components/ChatApp';
+import ContactUs from './components/ContactUs';
 import { auth } from './firebase';
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
     return <div>Loading...</div>;
   }
 
-  const PrivateRoute = ({ element, ...rest }) => {
+  const PrivateRoute = ({ element }) => {
     return user ? element : <Navigate to="/signin" />;
   };
 
@@ -39,7 +40,8 @@ function App() {
           <Route path="/" element={<Intro />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/chatapp"  element={<ChatApp />} />
+          <Route path="/chatapp" element={<PrivateRoute element={<ChatApp />} />} />
+          <Route path="/contactUs" element={<ContactUs />} />
         </Routes>
       </div>
     </Router>
