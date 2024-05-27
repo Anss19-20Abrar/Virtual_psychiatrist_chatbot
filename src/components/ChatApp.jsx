@@ -101,7 +101,7 @@ const Chat = () => {
     signOut(auth).then(() => {
       // Sign-out successful
       console.log('Sign-out successful.');
-      alert('Sign-out successful.');
+      alert('Are u Sure u want to Sign-out .');
       // Any additional logic after successful logout can be added here, such as redirecting to a login page
     }).catch((error) => {
       // An error happened
@@ -196,15 +196,22 @@ const Chat = () => {
         <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
           <div className='bg-white p-6 rounded-lg shadow-lg' style={{ width: '250px', height: '200px', background: 'white' }}>
             <div className='text-xl font-bold mb-4'>Settings</div>
-            <div className='py-2 hover:bg-gray-200 cursor-pointer' onClick={handleLogout}>
-              Logout
+            <div className='flex justify-center mt-4'>
+              <button
+                className='px-6 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75'
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
             </div>
-            <button
-              className='mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700'
-              onClick={togglePopup}
-            >
+            <div className='flex justify-center mt-4'>
+              <button
+                className='mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 '
+                onClick={togglePopup}
+              >
               Close
-            </button>
+              </button>
+            </div>
           </div>
         </div>
       )}

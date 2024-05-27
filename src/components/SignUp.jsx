@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { auth, firestore } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate } from "react-router-dom";
 import userIcon from "../img/user.svg";
 import emailIcon from "../img/email.svg";
@@ -50,15 +51,22 @@ const SignUp = () => {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        await firestore.collection('users').doc(user.uid).set({
-          name,
-          email,
-        });
+        try {
+          await setDoc(doc(firestore, 'users', user.uid), {
+            name,
+            email,
+          });
 
-        notify("You signed up successfully", "success");
-        navigate("/ChatApp");
-      } catch (error) {
-        if (error.code === 'auth/email-already-in-use') {
+          notify("You signed up successfully", "success");
+          navigate("/signin");
+        } catch (firestoreError) {
+          console.error("Error writing user to Firestore: ", firestoreError);
+          notify("Something went wrong with saving user data!", "error");
+        }
+
+      } catch (authError) {
+        console.error("Error during user creation: ", authError);
+        if (authError.code === 'auth/email-already-in-use') {
           notify("You have already registered, log in to your account", "warning");
         } else {
           notify("Something went wrong!", "error");

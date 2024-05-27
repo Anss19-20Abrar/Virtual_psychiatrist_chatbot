@@ -24,18 +24,19 @@ const ContactUs = ({ toggleContactUs }) => {
   };
 
   return (
-    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
-      <div className='bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl mx-auto'>
-        <div className='text-center w-full bg-gray-800 text-gray-100 px-8 py-12 rounded-t-lg'>
-          <h1 className='text-4xl lg:text-6xl'>Contact Form</h1>
+    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
+      <div className='bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl mx-auto' style={{ height: '92vh' }}>
+        <div className='text-center w-full bg-gray-800 text-gray-100 px-8 py-4 rounded-t-lg'>
+          <h1 className='text-2xl lg:text-4xl'>Contact Form</h1>
         </div>
-        <div className='px-8 py-16 grid gap-8 grid-cols-1 md:grid-cols-2 bg-gray-100 text-gray-900 rounded-b-lg shadow-lg'>
+        <div className='px-8 py-4 grid gap-4 grid-cols-1 md:grid-cols-2 bg-gray-100 text-gray-900 rounded-b-lg shadow-lg'>
           <div className='flex flex-col justify-between'>
             <div>
-              <h2 className='text-4xl lg:text-5xl font-bold leading-tight'>Let's talk about everything!</h2>
-              <div className='text-gray-700 mt-8'>
-                Hate forms? Send us an <span className='underline'>email</span> instead.
+              <h2 className='text-2xl lg:text-3xl font-bold leading-tight'>Let's talk about everything!</h2>
+              <div className='text-gray-700 mt-4'>
+                Hate forms? Send us an <a href='mailto:anssabrar11@gmail.com' className='underline'>email</a> instead.
               </div>
+
             </div>
           </div>
           <div>
@@ -44,7 +45,7 @@ const ContactUs = ({ toggleContactUs }) => {
                 <span className='uppercase text-sm text-gray-600 font-bold'>Full Name</span>
                 <input
                   id='fullName'
-                  className='w-full bg-gray-300 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline'
+                  className='w-full bg-gray-300 text-gray-900 mt-2 p-2 rounded-lg focus:outline-none focus:shadow-outline'
                   type='text'
                   placeholder='John Doe'
                   value={fullName}
@@ -52,11 +53,11 @@ const ContactUs = ({ toggleContactUs }) => {
                   required
                 />
               </div>
-              <div className='mt-8'>
+              <div className='mt-4'>
                 <span className='uppercase text-sm text-gray-600 font-bold'>Email</span>
                 <input
                   id='email'
-                  className='w-full bg-gray-300 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline'
+                  className='w-full bg-gray-300 text-gray-900 mt-2 p-2 rounded-lg focus:outline-none focus:shadow-outline'
                   type='email'
                   placeholder='example@example.com'
                   value={email}
@@ -64,21 +65,21 @@ const ContactUs = ({ toggleContactUs }) => {
                   required
                 />
               </div>
-              <div className='mt-8'>
+              <div className='mt-4'>
                 <span className='uppercase text-sm text-gray-600 font-bold'>Message</span>
                 <textarea
                   id='message'
-                  className='w-full h-32 bg-gray-300 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline'
+                  className='w-full h-24 bg-gray-300 text-gray-900 mt-2 p-2 rounded-lg focus:outline-none focus:shadow-outline'
                   placeholder='Your message here...'
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   required
                 ></textarea>
               </div>
-              <div className='mt-8'>
+              <div className='mt-4'>
                 <button
                   type='submit'
-                  className='uppercase text-sm font-bold tracking-wide bg-indigo-500 text-gray-100 p-3 rounded-lg w-full focus:outline-none focus:shadow-outline'
+                  className='uppercase text-sm font-bold tracking-wide bg-indigo-500 text-gray-100 p-2 rounded-lg w-full focus:outline-none focus:shadow-outline'
                 >
                   Send Message
                 </button>
