@@ -55,7 +55,7 @@ const Login = () => {
               placeholder="E-mail"
               onChange={changeHandler}
               onFocus={focusHandler}
-              autoComplete="off"
+              autoComplete="on"
             />
             <img src={emailIcon} alt="" />
           </div>

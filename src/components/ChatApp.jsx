@@ -165,7 +165,7 @@ const Chat = () => {
                 <path d='M17 17l-2 2l2 2'></path>
               </svg>
             </span>
-            Code Settings
+            Logout Profile
           </div>
           <div className='py-3 text-center rounded mt-4 text-lg font-light flex items-center px-8 hover:bg-slate-600 cursor-pointer' onClick={toggleContactUs}>
             <span className='mr-4'>
@@ -195,7 +195,7 @@ const Chat = () => {
       {isPopupVisible && (
         <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
           <div className='bg-white p-6 rounded-lg shadow-lg' style={{ width: '250px', height: '200px', background: 'white' }}>
-            <div className='text-xl font-bold mb-4'>Settings</div>
+            <div className='text-xl font-bold mb-4'>Logout Profile</div>
             <div className='flex justify-center mt-4'>
               <button
                 className='px-6 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75'
