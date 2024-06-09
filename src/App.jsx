@@ -6,6 +6,7 @@ import SignUp from './components/SignUp';
 import Intro from './components/Intro';
 import ChatApp from './components/ChatApp';
 import ContactUs from './components/ContactUs';
+import About from './components/About';
 import { auth } from './firebase';
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/chatapp" element={<PrivateRoute element={<ChatApp />} />} />
           <Route path="/contactUs" element={<ContactUs />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </div>
     </Router>

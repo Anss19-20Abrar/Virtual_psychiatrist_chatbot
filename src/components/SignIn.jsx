@@ -44,6 +44,7 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
+      {/* <img src="LoginBG.jpg" alt="Mental health background" className="intro-background" /> */}
       <form className={styles.formLogin} onSubmit={submitHandler} autoComplete="off">
         <h2>Sign In</h2>
         <div>
@@ -76,8 +77,8 @@ const Login = () => {
         </div>
         <div>
           <button type="submit">Login</button>
-          <span style={{ color: "#a29494", textAlign: "center", display: "inline-block", width: "100%" }}>
-            Don&apos;t have an account? <Link to="/signup">Create account</Link>
+          <span style={{ color: "black", textAlign: "center", display: "inline-block", width: "100%" , fontFamily: "Arial, Helvetica, sans-serif", fontWeight: "bold"}}>
+            Don&apos;t have an account? <Link to="/signup" style={{ color: "Red", textDecoration: "underline" , cursor: "pointer", fontWeight: "bold" , transition: "all 0.3s ease-in-out", fontFamily: "Arial, Helvetica, sans-serif" , fontSize: "1rem", marginLeft: "5px"}}>Create account</Link>
           </span>
         </div>
       </form>

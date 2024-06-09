@@ -1,22 +1,40 @@
-.formLogin {
-  background: #fff;
-  box-shadow: #646cff;
-  border: 1px solid #646cff;
-  padding: 25px;
-  border-radius: 11px;
-  min-width: 500px;
-}
-
+/* Add background image to the container and apply blur effect */
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  background: url('../../public/LoginBG.jpg') no-repeat center center/cover;
+  position: relative;
+}
+
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  filter: blur(8px);
+  z-index: -1;
+}
+
+/* Ensure the form stays on top with semi-transparent background */
+.formLogin {
+  background: rgba(255, 255, 255, 0.55); /* Semi-transparent white background */
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #646cff;
+  padding: 25px;
+  border-radius: 11px;
+  min-width: 500px;
+  z-index: 1;
 }
 
 .formLogin > h2 {
   margin-bottom: 28px;
-  color: #646cff;
+  color: #000000;
   text-align: center;
   font-weight: bold;
 }
@@ -35,17 +53,13 @@
   background: #fff;
   border-radius: 4px;
   outline: 0;
-  border: 1px solid #646cff;
-  box-shadow: #646cff;
+  border: 1px solid #000002;
   padding: 15px 32px;
   width: 100%;
   font-family: Arial, Helvetica, sans-serif;
   transition: all 0.3s ease-in-out;
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -ms-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
 }
+
 .formLogin input[type="text"]:focus,
 .formLogin input[type="email"]:focus,
 .formLogin input[type="password"]:focus {
@@ -92,11 +106,8 @@
   appearance: none;
   border-radius: 5px;
   transition: all 0.2s ease-in-out;
-  -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  -ms-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
 }
+
 .formLogin input[type="checkbox"]:checked {
   background-color: #040b8f;
   background-image: url("../img/tik.svg");
@@ -114,10 +125,6 @@
   left: 7px;
   top: 50%;
   transform: translateY(-50%);
-  -webkit-transform: translateY(-50%);
-  -moz-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  -o-transform: translateY(-50%);
 }
 
 .formLogin ::placeholder {
@@ -141,43 +148,46 @@
 }
 
 .formLogin button[type="submit"] {
-  /* Base styles */
   display: block;
   text-align: center;
-  width: 100%; /* Adjust width as needed */
-  padding: 15px 25px; /* Increase padding for better readability */
-  font-weight: bold; /* Add some weight for emphasis */
-  border: none; /* Remove default border */
-  border-radius: 5px; /* Round corners */
-  cursor: pointer; /* Indicate hover interaction */
-  transition: all 0.3s ease-in-out; /* Smooth transition on hover */
-
-  /* Choose your preferred color combination: */
-  
-  /* Option 1: Blue Gradient with White Text */
-  background: linear-gradient(to right, #dd4b4b, #646cff); 
-
-  color: #fff;  /* White text */
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
-
-  /* Option 3: White with Border and Hover Color */
-  /* background: #fff;  /* White background */
-  /* border: 2px solid #42ba96;  /* Green border */
-  /* color: #42ba96;  /* Green text */
-  /* 
-  /* On hover, change background and text color: */
-  .formLogin button[type="submit"]:hover {
-    background: var(--main-color-hover) !important;  /* Override base color if using custom variable */
-    color: #fff !important; /* Ensure white text on hover for all options */
-  }
+  width: 100%;
+  padding: 15px 25px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  background: linear-gradient(to right, #dd4b4b, #646cff);
+  color: #fff;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.formLogin button[type="submit"]:hover {
+  background: var(--main-color-hover) !important;
+  color: #fff !important;
+}
+
+.Login-link {
+  color: blue;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  transition: all 0.3s ease-in-out;
+}
+
+.Login-link:hover {
+  color: red; /* Change to your preferred hover color */
+  text-decoration: underline; /* Optional: adds underline on hover */
+}
 
 .terms {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 19px 0;
+  font: 14px Arial, Helvetica, sans-serif;
+  font-weight: bold;
+;
 }
 
 @media (max-width: 568px) {
@@ -186,7 +196,7 @@
     padding: 16px;
   }
   .formLogin input[type="text"],
-  .formLoginQ input[type="email"],
+  .formLogin input[type="email"],
   .formLogin input[type="password"] {
     padding: 10px 32px;
   }

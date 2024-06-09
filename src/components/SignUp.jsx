@@ -125,8 +125,9 @@ const SignUp = () => {
         </div>
         <div>
           <button type="submit">Create Account</button>
-          <span style={{ color: "#a29494", textAlign: "center", display: "inline-block", width: "100%" }}>
-            Already have an account? <Link to="/signin">Sign In</Link>
+          <span style={{ color: "black", textAlign: "center", display: "inline-block", width: "100%" , fontSize: "1rem", fontFamily: "Arial, Helvetica, sans-serif", fontWeight: "bold"}}>
+            Already have an account? 
+            <Link to="/signin" style={{ color: "Red", textDecoration: "underline" , cursor: "pointer", fontWeight: "bold" , transition: "all 0.3s ease-in-out", fontFamily: "Arial, Helvetica, sans-serif" , fontSize: "1rem", marginLeft: "5px"}}>Sign In</Link>
           </span>
         </div>
       </form>
