@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { auth, firestore } from '../firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import React, { useEffect, useState } from "react";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import userIcon from "../img/user.svg";
 import emailIcon from "../img/email.svg";
@@ -12,8 +11,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { notify } from "./toast";
 import { Link } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import { auth, firestore } from '../firebase'; // Ensure proper import paths
 
-const SignUp = () => {
+const SignUp = ({ setCurrentUserUID }) => {
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -48,13 +49,17 @@ const SignUp = () => {
     if (!Object.keys(errors).length) {
       try {
         const { email, password, name } = data;
+        const uniqueId = uuidv4();
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-
+        setCurrentUserUID(user.uid);
+        
         try {
           await setDoc(doc(firestore, 'users', user.uid), {
             name,
             email,
+            uid: user.uid,
+            uniqueId
           });
 
           notify("You signed up successfully", "success");

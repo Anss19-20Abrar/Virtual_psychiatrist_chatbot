@@ -5,14 +5,13 @@ import { getAnalytics } from 'firebase/analytics';
 import { getDatabase } from 'firebase/database';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDSM9fbI-K87cjq3H3ebK3l8nL6p9fEUqc",
-  authDomain: "virtual-psychiatrist-f6c15.firebaseapp.com",
-  projectId: "virtual-psychiatrist-f6c15",
-  storageBucket: "virtual-psychiatrist-f6c15.appspot.com",
-  messagingSenderId: "101974128331",
-  appId: "1:101974128331:web:4b871c1c03ed3576640d4e",
-  measurementId: "G-B9BSEF64J0",
-  databaseURL: "https://virtual-psychiatrist-f6c15-default-rtdb.firebaseio.com/", // Ensure this is correct
+  apiKey: import.meta.env.VITE_FIREBASE_API,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_DATABASE_URL,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STOREAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGE_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID
 };
 
 // Initialize Firebase

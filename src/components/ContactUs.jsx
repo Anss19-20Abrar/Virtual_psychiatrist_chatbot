@@ -1,26 +1,36 @@
-// ContactUs.jsx
 import React, { useState } from 'react';
-import { getDatabase, ref, push, set } from 'firebase/database';
-import { app } from '../firebase'; // Adjust the path to your actual firebase.js file
+import { collection, addDoc } from 'firebase/firestore';
+import { firestore } from '../firebase'; // Adjust the path to your actual firebase.js file
 
 const ContactUs = ({ toggleContactUs }) => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const db = getDatabase(app); // Use the imported app variable here
-    const newContactRef = push(ref(db, 'contacts'));
-    await set(newContactRef, { fullName, email, message });
+    setLoading(true);
+    setError('');
 
-    // Reset form fields
-    setFullName('');
-    setEmail('');
-    setMessage('');
+    try {
+      const contactRef = collection(firestore, 'contacts');
+      await addDoc(contactRef, { fullName, email, message });
 
-    // Close the contact form
-    toggleContactUs();
+      // Reset form fields
+      setFullName('');
+      setEmail('');
+      setMessage('');
+
+      // Close the contact form
+      toggleContactUs();
+    } catch (err) {
+      setError('Failed to send message. Please try again.');
+      console.error('Error writing to database:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -36,7 +46,6 @@ const ContactUs = ({ toggleContactUs }) => {
               <div className='text-gray-700 mt-4'>
                 Hate forms? Send us an <a href='mailto:anssabrar11@gmail.com' className='underline'>email</a> instead.
               </div>
-
             </div>
           </div>
           <div>
@@ -80,10 +89,12 @@ const ContactUs = ({ toggleContactUs }) => {
                 <button
                   type='submit'
                   className='uppercase text-sm font-bold tracking-wide bg-indigo-500 text-gray-100 p-2 rounded-lg w-full focus:outline-none focus:shadow-outline'
+                  disabled={loading}
                 >
-                  Send Message
+                  {loading ? 'Sending...' : 'Send Message'}
                 </button>
               </div>
+              {error && <div className="text-red-500 mt-2">{error}</div>}
             </form>
             <button
               className='mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700'
@@ -97,4 +108,5 @@ const ContactUs = ({ toggleContactUs }) => {
     </div>
   );
 };
+
 export default ContactUs;

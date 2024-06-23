@@ -2,8 +2,7 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-
-/* introduction or home page  */
+ /* introduction or home page  */
 
 .intro-container {
   position: relative; /* Required for background image positioning */
