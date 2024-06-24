@@ -72,6 +72,8 @@ const Chat = ({ currentUserUID }) => {
 
   // Load chat history on component mount or when currentUserUID changes
   useEffect(() => {
+
+
     
 
     // Select Chat From history so i can check our previous interaction with bot
@@ -93,6 +95,8 @@ const Chat = ({ currentUserUID }) => {
       }
     };
 
+
+    
     getChat()
     fetchChatHistory();
     
@@ -128,9 +132,35 @@ const Chat = ({ currentUserUID }) => {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      
+      handleSend();
+    }
+  };
+
 
 
   // Handle sending a new message
+  const typeWriterEffect = async (text) => {
+    const words = text.split(' ');
+    let displayedText = '';
+    for (let i = 0; i < words.length; i++) {
+      displayedText += (i > 0 ? ' ' : '') + words[i];
+      updateBotMessage(displayedText);
+      await new Promise((resolve) => setTimeout(resolve, 50)); // Adjust typing speed here
+    }
+  };
+
+  const updateBotMessage = (text) => {
+    setMessages((prevMessages) => {
+      const lastMessageIndex = prevMessages.length - 1;
+      const lastMessage = prevMessages[lastMessageIndex];
+      const updatedMessage = { ...lastMessage, text };
+      return [...prevMessages.slice(0, lastMessageIndex), updatedMessage];
+    });
+  };
+
   const handleSend = async () => {
     if (input.trim() === '') return;
     setConversationStarted(true);
@@ -148,6 +178,8 @@ const Chat = ({ currentUserUID }) => {
             ...messagess.map(msg => ({ role: msg.sender === 'user' ? 'user' : 'assistant', content: msg.text })),
             { role: 'user', content: "Hello" },
             { role: 'assistant', content: "Hi! How are you feeling today?" },
+            { role: 'user', content: "are you open ai?" },
+            { role: 'assistant', content: "No! Im a LLM from Meta im here to help you about your mental health" },
             { role: 'user', content: "If your question is not about mental health, please ask about mental health topics instead." },
             { role: 'assistant', content: "Please ask about mental health topics instead. Feel free to ask any questions related to mental health, and I'll do my best to assist you." },
             { role: 'user', content: "You are a Mental health Therapist you are going to provide therapy to the patients who are struglling with depression, anxiety, sucidial thoughts, PTSD, bullying" },
@@ -168,10 +200,10 @@ const Chat = ({ currentUserUID }) => {
       );
 
       const botReply = response.data.choices[0].message.content.trim();
-      const botMessage = { text: botReply, timestamp: new Date().toISOString(), sender: 'assistant' };
-      const newMessages = [userMessage, botMessage];
-
+      const botMessage = { text: '', timestamp: new Date().toISOString(), sender: 'assistant' };
       setMessages((prevChat) => [...prevChat, botMessage]);
+
+      await typeWriterEffect(botReply);
 
       // Set up Firestore references
       const today = new Date();
@@ -185,12 +217,12 @@ const Chat = ({ currentUserUID }) => {
       if (conversationDocSnapshot.exists()) {
         // Conversation document exists, update it with new messages
         await updateDoc(conversationDocRef, {
-          messages: arrayUnion(...newMessages)
+          messages: arrayUnion(userMessage, { text: botReply, timestamp: new Date().toISOString(), sender: 'assistant' })
         });
       } else {
         // Conversation document doesn't exist, create it with initial messages
         await setDoc(conversationDocRef, {
-          messages: newMessages
+          messages: [userMessage, { text: botReply, timestamp: new Date().toISOString(), sender: 'assistant' }]
         });
       }
 
@@ -407,10 +439,11 @@ const Chat = ({ currentUserUID }) => {
               type='text'
               onChange={(e) => setInput(e.target.value)}
               value={input}
+              onKeyDown={handleKeyDown}
               className='w-[70%] rounded-lg p-4 pr-16 bg-slate-800 text-white'
               placeholder='Type your message here...'
             />
-            <span className='absolute right-[16.5%] top-4 cursor-pointer flex' onClick={handleSend}>
+            <span className='absolute right-[16.5%] top-4 cursor-pointer flex'  onClick={handleSend} >
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 className='icon icon-tabler icon-tabler-send'
